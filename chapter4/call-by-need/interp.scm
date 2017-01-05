@@ -64,10 +64,17 @@
             (value-of exp1 env)
             (value-of exp2 env)))
 
-        (let-exp (var exp1 body)       
-          (let ((val (value-of exp1 env)))
-            (value-of body
-              (extend-env var (newref val) env))))
+       ;regular let-exp
+       ; (let-exp (var exp1 body)       
+        ;  (let ((val (value-of exp1 env)))
+         ;   (value-of body
+          ;    (extend-env var (newref val) env))))
+        
+        ;let-exp with memoization
+        (let-exp (var exp1 body)
+          (let ((val (value-of-operand exp1 env)))
+	    (let ((new-env (extend-env var val env)))
+	      (value-of body new-env))))
 
         (proc-exp (var body)
 	  (proc-val
@@ -155,7 +162,6 @@
       (cases thunk th
         (a-thunk (exp1 saved-env)
           (value-of exp1 saved-env)))))
-
   )
   
         

@@ -114,9 +114,9 @@
     (set-rhs-cont
       (loc reference?)
       (cont continuation?))
-
     (spawn-cont 
-      (saved-cont continuation?))
+      (saved-cont continuation?)
+      (time integer?))
     (wait-cont 
       (saved-cont continuation?))
     (signal-cont 

@@ -62,13 +62,14 @@
       (expression
         ("set" identifier "=" expression)
         set-exp)
-      
+
+      ;spawn now takes the length of the job as an input
       (expression
-        ("spawn" "(" expression ")")
+        ("spawn" "(" number "," expression ")")
         spawn-exp)
 
       (expression 
-        ("yield" "(" ")")
+        ("yield" "(" number ")")
         yield-exp)
 
       (expression

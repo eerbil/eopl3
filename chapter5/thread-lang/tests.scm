@@ -153,16 +153,18 @@ in ((f 44) 33)"
 
       ;; could we do these without lists? ans: yes, but the programs
       ;; wouldn't be so clear.
-
+      
+      ;test case is changed in order to add the step count
       (two-threads "
 letrec 
   noisy (l) = if null?(l) 
               then 0 
-              else begin print(car(l)); yield() ; (noisy cdr(l)) end
+              else begin print(car(l)); (noisy cdr(l)) end
 in
    begin
-    spawn(proc (d) (noisy [1,2,3,4,5])) ;
-    spawn(proc (d) (noisy [6,7,8,9,10]));
+    spawn(5, proc (d) (noisy [1,2,3,4,5]));
+    spawn(8, proc (d) (noisy [6,7,8,9,10,11,12,13]));
+    spawn(3, proc (d) (noisy [14,15,16])) ;
     print(100);
     33
    end

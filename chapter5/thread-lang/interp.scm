@@ -91,12 +91,12 @@
           (value-of/k exp env
             (set-rhs-cont (apply-env env id) cont)))
 
-        (spawn-exp (exp)
+        (spawn-exp (time exp)
           (value-of/k exp env
-            (spawn-cont cont)))
+            (spawn-cont cont time)))
 
-        (yield-exp ()
-          (place-on-ready-queue!
+        (yield-exp (time)
+          (place-on-ready-queue! time
             (lambda () (apply-cont cont (num-val 99))))
           (run-next-thread))
 
@@ -123,7 +123,7 @@
     (lambda (cont val)
       (if (time-expired?)
         (begin
-          (place-on-ready-queue!
+          (place-on-ready-queue! 0
             (lambda () (apply-cont cont val)))
           (run-next-thread))
         (begin
@@ -161,14 +161,14 @@
                 (setref! loc val)
                 (apply-cont cont (num-val 26))))
 
-            (spawn-cont (saved-cont)
-              (let ((proc1 (expval->proc val)))
-                (place-on-ready-queue!
-                  (lambda ()
-                    (apply-procedure proc1
-                      (num-val 28)
-                      (end-subthread-cont))))
-              (apply-cont saved-cont (num-val 73))))
+            ; time is decremented by 1 when one time quantum passes 
+            (spawn-cont (saved-cont time)
+                    (let ((proc1 (expval->proc val)))
+                      (place-on-ready-queue! (- time 1) 
+                                            (lambda () (apply-procedure proc1
+                                                              (num-val 28)
+                                                              (end-subthread-cont))))
+                    (apply-cont saved-cont (num-val 73))))
 
             (wait-cont (saved-cont)
               (wait-for-mutex

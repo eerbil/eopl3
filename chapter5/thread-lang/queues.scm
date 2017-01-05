@@ -23,5 +23,14 @@
   (define dequeue
     (lambda (q f)
       (f (car q) (cdr q))))
+  
+;this will check the remaining times and add the new element in its place.
+(define insert
+    (lambda (q val)
+      (if (null? q)
+          (enqueue q val)
+          (if (> (caar q) (car val))
+              (cons val q)
+              (cons (car q) (insert (cdr q) val)))))) 
 
   )

@@ -52,9 +52,9 @@
                      sloppy-val)))))
 
 
-  ;; (stop-after-first-error #t)
-  ;; (run-all 5)
-  ;; (run-one 1000 'producer-consumer)
+  ;(stop-after-first-error #t)
+  ;(run-all 5)
+   (run-one 1000 'two-threads)
 
   )
 

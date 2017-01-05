@@ -39,14 +39,19 @@
   ;;;;;;;;;;;;;;;; the final answer ;;;;;;;;;;;;;;;;
 
   ;; place-on-ready-queue! : Thread -> Unspecified
-  ;; Page: 184  
+  ;; Page: 184
+  ;the ready queue will hold a list with the time remaining for a task and also the task so whenever the task is being placed in the ready queue
+  ;the remaining time of the tasks will be checked and the task will be placed according to it so that the tsk with the least remaining task will be
+  ;at the front to be dequeued.
   (define place-on-ready-queue!
-    (lambda (th)
+    (lambda (time th)
       (set! the-ready-queue
-        (enqueue the-ready-queue th))))
+        (insert the-ready-queue (list time th)))))
 
   ;; run-next-thread : () -> FinalAnswer
-  ;; Page: 184    
+  ;; Page: 184
+  
+  ;first-ready-thread now holds the procedure of the thread in the cdr of the pair
   (define run-next-thread
     (lambda ()
       (if (empty? the-ready-queue)
@@ -54,8 +59,8 @@
         (dequeue the-ready-queue
           (lambda (first-ready-thread other-ready-threads)
             (set! the-ready-queue other-ready-threads)            
-            (set! the-time-remaining the-max-time-slice) 
-            (first-ready-thread)
+            (set! the-time-remaining the-max-time-slice)
+            ((cadr first-ready-thread))
             )))))
 
   ;; set-final-answer! : ExpVal -> Unspecified
@@ -65,7 +70,7 @@
       (set! the-final-answer val)))
 
   ;; time-expired? : () -> Bool
-  ;; Page: 184    
+  ;; Page: 184
   (define time-expired?
     (lambda ()
       (zero? the-time-remaining)))
@@ -77,3 +82,4 @@
       (set! the-time-remaining (- the-time-remaining 1))))
 
   )
+
